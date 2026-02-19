@@ -1,0 +1,681 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwiftPick | professional pickup & delivery</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fefefe;
+      color: #1e1e2a;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* custom scroll */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e3a8a;
+      border-radius: 10px;
+    }
+
+    /* utility container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* section padding & fade-in animation */
+    section {
+      padding: 80px 0;
+      animation: fadeUp 0.8s ease forwards;
+      opacity: 0;  /* start invisible, end visible */
+    }
+
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* buttons */
+    .btn-primary {
+      display: inline-block;
+      background-color: #f59e0b;      /* warm orange */
+      color: #ffffff;
+      font-weight: 600;
+      padding: 14px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 20px rgba(245, 158, 11, 0.25);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary:hover {
+      background-color: #d97706;
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 20px 25px rgba(245, 158, 11, 0.35);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background-color: transparent;
+      color: #1e3a8a;
+      font-weight: 500;
+      padding: 10px 28px;
+      border-radius: 40px;
+      text-decoration: none;
+      border: 2px solid #1e3a8a;
+      transition: 0.3s;
+    }
+
+    .btn-outline:hover {
+      background-color: #1e3a8a;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* header / navbar */
+    .navbar {
+      background-color: #ffffff;
+      padding: 16px 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+      position: sticky;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+    .logo span {
+      color: #f59e0b;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #2d2d3a;
+      transition: 0.2s;
+    }
+    .nav-links a:hover {
+      color: #f59e0b;
+    }
+
+    /* mobile-friendly nav */
+    @media (max-width: 700px) {
+      .navbar .container {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 18px;
+      }
+    }
+
+    /* hero split */
+    .hero {
+      padding: 40px 0 80px 0;
+      background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
+    }
+    .hero .container {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .hero-content {
+      flex: 1 1 400px;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #0f172a;
+    }
+    .hero-content h1 i {
+      color: #f59e0b;
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      margin: 24px 0 32px;
+      color: #334155;
+    }
+    .hero-image {
+      flex: 1 1 400px;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 40px 50px -20px rgba(0,0,0,0.3);
+      transition: transform 0.4s ease;
+    }
+    .hero-image:hover {
+      transform: scale(1.02);
+    }
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* section title */
+    .section-title {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .section-title h2 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .section-title p {
+      color: #475569;
+      max-width: 600px;
+      margin: 8px auto 0;
+    }
+
+    /* services cards */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    .service-card {
+      background: white;
+      border-radius: 30px;
+      padding: 40px 24px 32px;
+      box-shadow: 0 25px 40px -15px rgba(0,20,30,0.1);
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+    }
+    .service-card:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 40px 50px -10px #1e3a8a40;
+    }
+    .service-icon {
+      background: #e0f2fe;
+      color: #1e3a8a;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 2.2rem;
+      transition: 0.3s;
+    }
+    .service-card:hover .service-icon {
+      background: #1e3a8a;
+      color: white;
+    }
+    .service-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .service-card p {
+      color: #475569;
+    }
+
+    /* how it works */
+    .steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+    }
+    .step-item {
+      flex: 1 1 220px;
+      text-align: center;
+      position: relative;
+    }
+    .step-number {
+      width: 70px;
+      height: 70px;
+      background-color: #1e3a8a;
+      color: white;
+      font-size: 2rem;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      box-shadow: 0 10px 0 #f59e0b;
+      transition: 0.3s;
+    }
+    .step-item:hover .step-number {
+      transform: rotate(360deg);
+      box-shadow: 0 0 0 6px #f59e0b80;
+    }
+    .step-item h4 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .step-item p {
+      color: #475569;
+    }
+
+    /* about section */
+    .about-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 50px;
+      align-items: center;
+    }
+    .about-image {
+      flex: 1 1 400px;
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: -30px 30px 0 #f59e0b;
+    }
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: 0.4s;
+    }
+    .about-image:hover img {
+      transform: scale(1.03);
+    }
+    .about-text {
+      flex: 1 1 350px;
+    }
+    .about-text h3 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .about-text p {
+      margin-bottom: 28px;
+      color: #334155;
+    }
+
+    /* testimonials */
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    .testimonial-card {
+      background: white;
+      border-radius: 30px;
+      padding: 30px 24px;
+      box-shadow: 0 15px 30px -8px rgba(0,0,0,0.1);
+      transition: 0.3s;
+      border: 1px solid #f1f5f9;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-6px);
+      border-color: #f59e0b;
+    }
+    .testimonial-card .user {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .user img {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #f59e0b;
+    }
+    .user h4 {
+      font-size: 1.2rem;
+    }
+    .user span {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    .testimonial-card p {
+      font-style: italic;
+      color: #1e293b;
+    }
+
+    /* contact + form */
+    .contact-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      background: white;
+      border-radius: 50px;
+      padding: 40px;
+      box-shadow: 0 30px 40px -20px rgba(0,0,0,0.15);
+    }
+    .contact-info {
+      flex: 1 1 300px;
+    }
+    .contact-info h3 {
+      font-size: 1.9rem;
+      margin-bottom: 20px;
+    }
+    .contact-info .info-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 30px 0;
+    }
+    .info-item i {
+      font-size: 1.8rem;
+      color: #f59e0b;
+      width: 40px;
+    }
+    .contact-form {
+      flex: 1 1 350px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group input, 
+    .form-group textarea {
+      width: 100%;
+      padding: 16px 22px;
+      border: 1px solid #e2e8f0;
+      border-radius: 40px;
+      font-family: 'Poppins', sans-serif;
+      transition: 0.2s;
+      background: #f8fafc;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px #f59e0b30;
+    }
+    .form-group textarea {
+      border-radius: 30px;
+      resize: vertical;
+    }
+    .contact-form button {
+      background-color: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 10px 20px #1e3a8a40;
+    }
+    .contact-form button:hover {
+      background-color: #f59e0b;
+      transform: scale(1.04);
+      box-shadow: 0 15px 25px #f59e0b60;
+    }
+
+    /* footer */
+    .footer {
+      background-color: #0f172a;
+      color: #cbd5e1;
+      padding: 40px 0 20px;
+      text-align: center;
+    }
+    .footer .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .footer-logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+    }
+    .footer-logo span {
+      color: #f59e0b;
+    }
+    .social-links a {
+      color: white;
+      margin: 0 12px;
+      font-size: 1.5rem;
+      transition: 0.2s;
+      display: inline-block;
+    }
+    .social-links a:hover {
+      color: #f59e0b;
+      transform: translateY(-3px);
+    }
+    .copyright {
+      font-size: 0.9rem;
+      margin-top: 20px;
+    }
+
+    /* small animations extras */
+    .hero-image, .service-card, .step-item, .testimonial-card {
+      animation: fadeUp 0.6s ease forwards;
+      opacity: 0;  /* will be overridden but ensures smooth */
+    }
+    /* delay for cards */
+    .service-card:nth-child(1) { animation-delay: 0.1s; }
+    .service-card:nth-child(2) { animation-delay: 0.2s; }
+    .service-card:nth-child(3) { animation-delay: 0.3s; }
+    .step-item:nth-child(1) { animation-delay: 0.1s; }
+    .step-item:nth-child(2) { animation-delay: 0.2s; }
+    .step-item:nth-child(3) { animation-delay: 0.3s; }
+  </style>
+</head>
+<body>
+  <!-- header -->
+  <header class="navbar">
+    <div class="container">
+      <div class="logo">Swift<span>Pick</span></div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- hero / home -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Pickup. <i>&</i> Delivery. <br> <span style="color:#1e3a8a;">Fast as lightning</span></h1>
+        <p>One tap – we collect, pack and deliver. Real‑time tracking, safe hands, urban speed.</p>
+        <a href="#contact" class="btn-primary">Schedule pickup →</a>
+        <a href="#services" class="btn-outline" style="margin-left: 16px;">Our services</a>
+      </div>
+      <div class="hero-image">
+        
+         </div>
+    </div>
+  </section>
+
+  <!-- services -->
+  <section id="services">
+    <div class="container">
+      <div class="section-title">
+        <h2>professional services</h2>
+        <p>Everything you need for smooth pickup & delivery</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-truck"></i></div>
+          <h3>Same‑day delivery</h3>
+          <p>Urgent? We deliver within hours in the city. Guaranteed express.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-box-open"></i></div>
+          <h3>Secure packaging</h3>
+          <p>Eco‑friendly, shockproof packing. Your items travel safe.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-map-marked-alt"></i></div>
+          <h3>live tracking</h3>
+          <p>From pickup to drop — follow your package in real time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- how it works -->
+  <section id="how" style="background: #f1f5f9;">
+    <div class="container">
+      <div class="section-title">
+        <h2>how it works</h2>
+        <p>Three simple steps, zero hassle</p>
+      </div>
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <h4>Request pickup</h4>
+          <p>Tell us where & when. Use app or website – 30 sec.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <h4>We collect</h4>
+          <p>A friendly courier picks up your item. Carefully.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <h4>Delivered safely</h4>
+          <p>Track live. Get notified at drop‑off. Done.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- about section with real photo -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image">
+          <!-- real photo: hands with package -->
+          <img src="https://images.unsplash.com/photo-1566576912329-58c7f4127e82?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="hands holding cardboard package">
+        </div>
+        <div class="about-text">
+          <h3>more than 10k deliveries <br><span style="color:#f59e0b;">worldwide trust us</span></h3>
+          <p>SwiftPick started with a simple idea: make pickup and delivery effortless. We combine real‑time gps, eco‑friendly materials and insured handling. Our team works 24/7 to connect people and businesses with what matters.</p>
+          <a href="#contact" class="btn-primary" style="background-color:#1e3a8a; box-shadow: 0 10px 20px #1e3a8a50;">join our network</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- testimonials with real people photos -->
+  <section id="testimonials" style="background: #f8fafc;">
+    <div class="container">
+      <div class="section-title">
+        <h2>what clients say</h2>
+        <p>real stories from real people</p>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="user">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="client portrait">
+            <div><h4>Michael Chen</h4><span>small business owner</span></div>
+          </div>
+          <p>“I ship 20+ orders weekly. SwiftPick never lost a package. The tracking is super accurate and couriers are professional.”</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="user">
+            <img src="https://images.unsplash.com/photo-1494790108777-466d68a9b52a?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="client portrait">
+            <div><h4>Sarah M.</h4><span>fashion designer</span></div>
+          </div>
+          <p>“Love the secure packaging option. I send fragile prototypes, and they arrive in perfect condition every time.”</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="user">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="client portrait">
+            <div><h4>David Kim</h4><span>freelance photographer</span></div>
+          </div>
+          <p>“Same‑day delivery saved me twice during events. Quick, polite, and they handle gear with care.”</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- contact area with form -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-title">
+        <h2>get in touch</h2>
+        <p>ready for a pickup? drop us a message</p>
+      </div>
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <h3>let’s talk</h3>
+          <div class="info-item"><i class="fas fa-phone-alt"></i> <span>+1 (800) 456-7890</span></div>
+          <div class="info-item"><i class="fas fa-envelope"></i> <span>hello@swiftpick.co</span></div>
+          <div class="info-item"><i class="fas fa-map-pin"></i> <span>451 courier ave, NY 10001</span></div>
+          <div style="margin-top: 30px;">
+            <i class="fas fa-clock"></i> Mon–Sun : 7am – 11pm
+          </div>
+        </div>
+        <div class="contact-form">
+          <form>
+            <div class="form-group"><input type="text" placeholder="Your name" required></div>
+            <div class="form-group"><input type="email" placeholder="Email address" required></div>
+            <div class="form-group"><textarea rows="4" placeholder="Tell us about pickup…"></textarea></div>
+            <button type="submit">Send request <i class="fas fa-paper-plane" style="margin-left: 8px;"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">Swift<span>Pick</span></div>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-x-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; 2025 SwiftPick. All rights reserved. Real images from Unsplash.
+      </div>
+    </div>
+  </footer>
+  <!-- small extra animation for buttons: pulse effect via css already included -->
+</body>
+</html>
